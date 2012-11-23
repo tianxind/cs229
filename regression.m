@@ -9,7 +9,7 @@ pidx=(tsecs > starttime) & (tsecs < endtime);
 price_train = price(pidx);
 tsecs_train = tsecs(pidx); 
 % Calculate rolling 5 minute spread
-spread = rolling5HL(price, tsecs);
+spread = rolling5HL(tsecs,price);
 spread = spread(pidx);
 %spread = rolling5HL(price_train, tsecs_train);
 % Calculate price movement at every tick

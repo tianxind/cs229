@@ -1,5 +1,5 @@
 % Calculate an array of rolling 5 minute high-low
-function rollingSpread = rolling5HL(price, tsecs)
+function rollingSpread = rolling5HL(tsecs, price)
 rollingSpread = zeros(1, numel(price));
 high = -Inf*ones(1,5);
 low = Inf*ones(1,5);

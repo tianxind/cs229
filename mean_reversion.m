@@ -2,6 +2,7 @@
 % 1 is uptick, and -1 is downtick
 % Initialize our first forecast to be an uptick
 function accuracy = mean_reversion(price)
+    
 prev_forecast = -1;
 accuracy = 0;
 for i=2:numel(price) - 1,
