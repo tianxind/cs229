@@ -1,12 +1,12 @@
+function plotdata(filename) 
 close all
-clear all
-load('GME_raw.mat');
+load(filename);
 %small = data(1:10,:);
 
 
-hour = str2double(raw(:,10));
-minute = str2double(raw(:,11));
-sec = str2double(raw(:,12));
+hour = str2double(raw(:,9));
+minute = str2double(raw(:,10));
+sec = str2double(raw(:,11));
 tsecs = 3600*hour+60*minute+sec;
 prices = [raw{:,3}];
 volumes = [raw{:,4}];
