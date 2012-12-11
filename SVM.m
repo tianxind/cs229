@@ -1,4 +1,4 @@
-function [ accuracy, correct_predictions ] = SVM( tsecs, prices, volumes )
+function [ profit, precision, recall, correct_predictions, total_predictions ] = SVM( tsecs, prices, volumes )
 %UNTITLED6 Summary of this function goes here
 %   Detailed explanation goes here
 %   Features:
@@ -74,7 +74,7 @@ function [ accuracy, correct_predictions ] = SVM( tsecs, prices, volumes )
     [~, volumes_test] = range_data(tsecs, volumes, train_end, test_end);
     
     test_start_time = tsecs_test(1) + 60 * 5;
-    for ii = 1:length(tsecs_test);
+    for ii = 1:length(tsecs_test) - 1;
         if tsecs_test(ii) >= test_start_time;
             [ price_num_trades, price_high, price_low, price_open ] = minute_block( tsecs_test, prices_test, tsecs_test(ii) );
             [ prev_price_num_trades, prev_price_high, prev_price_low, prev_price_open ] = minute_block( tsecs_test, prices_test, tsecs_test(ii) - 60 );
