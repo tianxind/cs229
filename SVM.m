@@ -73,7 +73,7 @@ function [ accuracy, correct_predictions ] = SVM( tsecs, prices, volumes )
     [tsecs_test, prices_test] = range_data(tsecs, prices, train_end, test_end);
     [~, volumes_test] = range_data(tsecs, volumes, train_end, test_end);
     
-    test_start_time = tsecs_test(1) + 60 * 2;
+    test_start_time = tsecs_test(1) + 60 * 5;
     for ii = 1:length(tsecs_test);
         if tsecs_test(ii) >= test_start_time;
             [ price_num_trades, price_high, price_low, price_open ] = minute_block( tsecs_test, prices_test, tsecs_test(ii) );
