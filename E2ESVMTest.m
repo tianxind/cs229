@@ -1,7 +1,15 @@
 function E2ESVMTest
 % Test on all .mat files in data folder
 files = dir('data/*.mat');
-for i = 1:length(files),
+num_files = length(files);
+% Output file name
+output = 'svm_results.xlsx';
+profit = zeros(num_files, 1);
+precision = zeros(num_files, 1);
+recall = zeros(num_files, 1);
+correct_predictions = zeros(num_files, 1);
+total_predictions = zeros(num_files, 1);
+for i = 1:num_files,
     fullname = strcat('data/', files(i).name); 
     load (fullname);
     strcat(fullname, '...')
@@ -13,5 +21,8 @@ for i = 1:length(files),
     prices = [raw{:,3}];
     volumes = [raw{:,4}];
     % Call SVM and report evaluation metrics
-    SVM(tsecs, prices, volumes);
+    [profit(i), precision(i), recall(i), correct_predictions(i), total_predictions(i)] = ...
+        SVM(tsecs, prices, volumes);
 end
+% Write output to xls file
+xlswrite(output, [profit precision recall correct_predictions total_predictions]);

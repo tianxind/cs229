@@ -1,4 +1,4 @@
-function [ accuracy, correct_predictions ] = SVM( tsecs, prices, volumes )
+function [ profit, precision, recall, correct_predictions, total_predictions ] = SVM( tsecs, prices, volumes )
 %UNTITLED6 Summary of this function goes here
 %   Detailed explanation goes here
 %   Features:
