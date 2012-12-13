@@ -19,8 +19,11 @@ for i = 1:num_files,
     prices = [raw{:,3}];
     volumes = [raw{:,4}];
     % Call SVM and report evaluation metrics
-    [model, profit(i), precision(i), recall(i)] = ...
+    [model profit(i), precision(i), recall(i)] = ...
         regression_new(tsecs, prices, volumes);
+    
 end
 % Write output to xls file
 xlswrite(output, [profit precision recall]);
+avg_profit = mean(profit);
+display(avg_profit);

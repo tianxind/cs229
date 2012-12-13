@@ -1,6 +1,6 @@
 function [model, profit, precision, recall] = regression_new( tsecs, prices, volumes)
     train_start = 9 * 3600 + 30 * 60;
-    train_end = 10 * 3600 + 30 * 60;
+    train_end = 10*3600 + 30 * ;
     
     [tsecs_train, prices_train] = range_data(tsecs, prices, train_start, train_end);   
     [~, volumes_train] = range_data(tsecs, volumes, train_start, train_end);
@@ -100,7 +100,7 @@ function [model, profit, precision, recall] = regression_new( tsecs, prices, vol
         %   build train_perc_priceOpen
         % build feature that represents the magnitude of price change with regard
         % to n-minute rolling spread
-        test_perc_priceOpen(ii - nMin) = (test_price_chart(ii, 3) - test_price_chart(ii - 1, 3)) / test_nmin_price_spread(ii - nMin);
+        test_perc_priceOpen(ii - nMin) = (test_price_chart(ii, 3) - price_chart(ii - 1, 3)) / test_nmin_price_spread(ii - nMin);
         test_perc_priceOpen(ii - nMin) = bucketize_perc(test_perc_priceOpen(ii - nMin));
         
         %   build train_perc_volumeHigh

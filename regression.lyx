@@ -1,0 +1,1054 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AUTOMATED STOCK TRADING USING MACHINE LEARNING ALGORITHMS
+\end_layout
+
+\begin_layout Author
+Tianxin Dai, Arpan Shah, Hongxia Zhong
+\end_layout
+
+\begin_layout Part*
+1.
+ Introduction
+\end_layout
+
+\begin_layout Standard
+The use of algorithms to make trading decisions has become a prevalent practice
+ in major stock exchanges of the world.
+ Algorithmic trading, also called automated trading, black-box trading,
+ or algo trading, is the use of electronic platforms for entering trading
+ orders with an algorithm deciding on aspects of the order such as the timing,
+ price, or quantity of the order, or in many cases initiating the order
+ without human intervention [Wikipedia].
+ Competitors across different companies try to edge out each other with
+ more and more statistically advanced algorithms that use more data, and
+ quicker execution to beat out the competition.
+ Machine Learning has therefore been central to the process of algorithmic
+ trading which provides an interesting problem with numerous variables.
+\end_layout
+
+\begin_layout Standard
+In particular, variations between stock exchanges, between stocks and between
+ days makes it difficult for one strategy or a single algorithm to be devised
+ that works across the board.
+ Regardless of this known limitation due to the inherant randomness of the
+ markets in this project different strategies are able to still monetize
+ on the exchange with advanced algorithms.
+ The algorithms that are utilized range from various supervised learning
+ algorithms such as regressionm, SVMs (Support Vector Machines) to unsupervised
+ algorithms such as Random Forest.
+ One of the most complicated challenges is choosing the right set of features
+ to model the algorithm with.
+ Feature selection from the vast amounts of real-time data such as 'Trade
+ Volumes' , 'Bid-Ask ratios', 'High-Low variations' and getting the features
+ right becomes crucial in having a successful trading algorithm.
+\end_layout
+
+\begin_layout Part*
+2.
+ Objectives
+\end_layout
+
+\begin_layout Standard
+We aim to devise a machine learning algorithm by starting from a very basic
+ model and successively improving it and the algorithm.
+ We plan to focus on feature selection to approach a solution that is able
+ to trade effectively on a selected universe of stocks.
+ To achieve this objective, we plan on emphasizing our attention into choosing
+ and validation of features using strategies such as 
+\series bold
+Filter Feature Selection 
+\series default
+and 
+\series bold
+Forward search.
+ 
+\series default
+The emphasis on feature selection for this problem comes from the fact that
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Not all features have the same predictive potential
+\begin_inset Quotes erd
+\end_inset
+
+[1].
+ In particular, given the nosiy nature of Stock Ticker data it is important
+ to make sure that over-fitting doesn't occur as that would increase the
+ influence of the noise and lead to poor predictive behavior.
+ Under-fitting is equally dangerous in this scenario as it would provide
+ an equally poor performance.
+\end_layout
+
+\begin_layout Part*
+3.
+ Data: Training and Testing
+\end_layout
+
+\begin_layout Subsection*
+Definition and Collection
+\end_layout
+
+\begin_layout Standard
+After speaking to a TA(Keith) from CS246 who had worked on similar problems
+ and reading a bit about stock universe selection, we decided to initially
+ look at a very conservative set of stocks as we didn't want to first have
+ an algorithm and then find the stocks to which it would fit.
+ We selected data based on the following criteria:
+\end_layout
+
+\begin_layout Standard
+a.
+ Price between 10-30 dollars in the last thirty days
+\end_layout
+
+\begin_layout Standard
+b.
+ Membership in the last 300 of S&P500.
+ (so not the 200 largest names because these we found had maximum speculative
+ buying).
+ 
+\end_layout
+
+\begin_layout Standard
+c.
+ ADV in the middle 33% - To ensure that the stocks being picked were not
+ being traded too few times or too often to reduce errors due to incredibly
+ high-volume or low volumes of trade
+\end_layout
+
+\begin_layout Paragraph*
+
+\series medium
+We utilized the Bloomberg terminals available to Stanford students for research
+ and academic purposes, and spent some time learning the system to be able
+ to query for the stocks that would fit into our desired universe.
+ After choosing our target stock universe we discovered a list of 26 stocks
+ to test our classification algorithms on
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+List Attached in Appendix
+\end_layout
+
+\end_inset
+
+.
+ We generated 30 different lists of stocks for a 30-day period to evaluate
+ our algorithm's performance, and we always select on day 
+\begin_inset Formula $t-1$
+\end_inset
+
+ the universe to trade on day 
+\begin_inset Formula $t$
+\end_inset
+
+ in order to avoid look-ahead bias.
+\end_layout
+
+\begin_layout Subsection*
+Pre-Processing
+\end_layout
+
+\begin_layout Standard
+Upon obtaining the data in an excel spreadsheet, we created matlab scripts
+ to be able to correctly parse the data and store it into quick .MAT files
+ and massaged fields in the Excel spreadsheet such as date and time to be
+ able to quickly process the ticker-data as a time-lapsed field and be able
+ to utilize them effectively across our matlab scripts.
+\end_layout
+
+\begin_layout Part*
+4.
+ Building Models and Experimentation
+\end_layout
+
+\begin_layout Subsection*
+Mean Reversion
+\end_layout
+
+\begin_layout Standard
+After speaking to Keith, The first strategy we utlized was a naive strategy
+ meant to familiarize ourselves with the data and test a very simple model
+ - Mean Reversion.
+ In this strategy, we looked at every tick in the trade data looking at
+ the previous two prices for every tick.
+ We predicted at every step that an uptick follows a downtick, and a downtick
+ follows an uptick, i.e if 
+\begin_inset Formula $P(t-1)>P(t)$
+\end_inset
+
+ then 
+\begin_inset Formula $P(t+1)<P(t)$
+\end_inset
+
+ and if 
+\begin_inset Formula $P(t-1)<P(t)$
+\end_inset
+
+ then 
+\begin_inset Formula $P(t+1)>P(t)$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $P(t-1)=P(t)$
+\end_inset
+
+, then we carry our previous forecast forward.
+ If we were predicting a downtick for 
+\begin_inset Formula $P(t)$
+\end_inset
+
+ and got 
+\begin_inset Formula $P(t-1)=P(t)$
+\end_inset
+
+, then we would continue forecasting downtick for 
+\begin_inset Formula $P(t+1)$
+\end_inset
+
+.
+ Although this strategy is indeed naive, it is still based on the behvior
+ of the stock-market because on the tick level the prices bounce between
+ the bid and the ask price[2].
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+vspace{10mm}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As expected, the error percentage of this strategy was pretty high and we
+ had an accuracy of only 11.2% on our data.
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Code for strategy attached in Appendix
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Regression
+\end_layout
+
+\begin_layout Standard
+The next strategy we explored was implementing a regression model with features
+ based on the rolling 5-minute high-low spread.
+ In this model we used dynamic programming to cache high and low for five
+ 1-minute-buckets and calculate the 5-minute high-low based on those buckets.
+ Note that this is only an approximation since our window could range from
+ 4 minutes to 6 minutes, but is still good enough for learning.
+ Then we classify each tick as a big move if the move is more than 50% of
+ the rolling 5 minute high-low spread, and a small move if it is less than
+ 50% of the spread.
+ And we regress the percentage move as a linear function of large move and
+ small move.
+ Specifically,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y=\theta_{0}+\theta_{1}x_{large}+\theta_{2}x_{small}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $x_{large}=\begin{cases}
+1, & p(t+1)-p(t)>0.5\Delta HL\\
+-1, & p(t+1)-p(t)<-0.5\Delta HL
+\end{cases}$
+\end_inset
+
+, 
+\begin_inset Formula $x_{small}=\begin{cases}
+1, & p(t+1)-p(t)<0.5\Delta HL\\
+-1, & p(t+1)-p(t)>-0.5\Delta HL
+\end{cases}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+5.
+ Further Work Planned Before Final Submission
+\end_layout
+
+\begin_layout Standard
+The next steps we plan to undertake should improve our accuracy even further.
+ We plan to implement a SVM model for this classification problem.
+ In addition, significant time will be spent on choosing, and optimizing
+ the feature set for the set of stocks that have been chosen as the universe.
+ The methods of analysis and improvement to decide and choose features will
+ be used and then mock trading sessions will be run to discuss the efficacy
+ of the algorithm designed in the end.
+\end_layout
+
+\begin_layout Part*
+6.
+ Reference
+\end_layout
+
+\begin_layout Standard
+[1]Winning the Kaggle Algorithmic Trading Challenge with the Composition
+ of Many Models and Feature Engineering,IEICE Transactions on Information
+ and Systems, vol.E95-D, no.10, 2012
+\end_layout
+
+\begin_layout Paragraph*
+
+\series medium
+[2]CS246 Hw4 Handout
+\end_layout
+
+\begin_layout Part*
+7.
+ Appendix
+\end_layout
+
+\begin_layout Subsubsection*
+Sample Universe of Stocks Fitting Criteria:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="26" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Stock Ticker
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Origin
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CNP
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+SLM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+KIM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+XL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TXT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LNC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TSN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NWL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CBG
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+NYX
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+UNM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+HRB
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GCI
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CVC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+SAI
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ZION
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+JBL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+IGT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+SEE
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+WPX
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TER
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GME
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+THC
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+APOl
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PBI
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+US Equity
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+Mean Reversion:
+\end_layout
+
+\begin_layout Standard
+% Implements mean-reversion and evaluate accuracy
+\end_layout
+
+\begin_layout Standard
+% 1 is uptick, and -1 is downtick
+\end_layout
+
+\begin_layout Standard
+% Initialize our first forecast to be an uptick
+\end_layout
+
+\begin_layout Standard
+function accuracy = mean_reversion(price)
+\end_layout
+
+\begin_layout Standard
+prev_forecast = -1;
+\end_layout
+
+\begin_layout Standard
+accuracy = 0;
+\end_layout
+
+\begin_layout Standard
+for i=2:numel(price) - 1,
+\end_layout
+
+\begin_layout Standard
+% If previous tick is uptick, then forecast downtick
+\end_layout
+
+\begin_layout Standard
+if price(i-1) < price(i)
+\end_layout
+
+\begin_layout Standard
+forecast = -1;
+\end_layout
+
+\begin_layout Standard
+% Forecast uptick if prev tick is downtick
+\end_layout
+
+\begin_layout Standard
+elseif price(i-1) > price(i)
+\end_layout
+
+\begin_layout Standard
+forecast = 1;
+\end_layout
+
+\begin_layout Standard
+% Otherwise, retain our previous forecast
+\end_layout
+
+\begin_layout Standard
+else
+\end_layout
+
+\begin_layout Standard
+forecast = prev_forecast;
+\end_layout
+
+\begin_layout Standard
+end
+\end_layout
+
+\begin_layout Standard
+% Now look at the actual tick and update our accuracy score
+\end_layout
+
+\begin_layout Standard
+if (price(i+1) > price(i) && forecast == 1) || ...
+\end_layout
+
+\begin_layout Standard
+(price(i+1) < price(i) && forecast == -1)
+\end_layout
+
+\begin_layout Standard
+accuracy = accuracy + 1;
+\end_layout
+
+\begin_layout Standard
+elseif (price(i+1) ~= price(i))
+\end_layout
+
+\begin_layout Standard
+accuracy = accuracy - 1;
+\end_layout
+
+\begin_layout Standard
+end 
+\end_layout
+
+\begin_layout Standard
+end
+\end_layout
+
+\begin_layout Standard
+% report accuracy
+\end_layout
+
+\begin_layout Standard
+accuracy = accuracy/(numel(price) - 2);
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_body
+\end_document

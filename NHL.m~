@@ -1,0 +1,7 @@
+function [ spread ] = NHL( price_chart, n )
+    
+    spread = zeros(length(price_chart) - n - 1, 2);
+    for ii = n + 1: length(price_chart);
+        spread()
+    end
+end
