@@ -4,7 +4,7 @@ function model = regression(price, tsecs)
 close all
 % Train on trades from 9:30am to 12:30pm
 starttime = 9*3600+30*60;
-endtime = 12*3600+30*60;
+endtime = 11*3600;
 pidx=(tsecs > starttime) & (tsecs < endtime);
 price_train = price(pidx);
 tsecs_train = tsecs(pidx); 
