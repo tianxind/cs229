@@ -44,10 +44,10 @@ function [ profit, precision, recall, accuracy ] = SVM( tsecs, prices, volumes )
         train_perc_priceOpen(ii - nMin) = (price_chart(ii, 3) - price_chart(ii - 1, 3)) / price_chart(ii - 1, 3);
         
         %   build train_perc_volumeHigh
-        train_perc_volumeHigh(ii - nMin) = (volume_chart(ii - 1, 1) - volume_chart(ii - 2, 1)) / volume_chart(ii - 2, 1);
+        train_perc_volumeHigh(ii - nMin) = (volume_chart(ii - 1, 1) - volume_chart(ii - 1, 1)) / volume_chart(ii - 2, 1);
         
         %   build train_perc_volumeLow
-        train_perc_volumeLow(ii - nMin) = (volume_chart(ii - 1, 2) - volume_chart(ii - 2, 2)) / volume_chart(ii - 2, 2);
+        train_perc_volumeLow(ii - nMin) = (volume_chart(ii, 2) - volume_chart(ii - 1, 2)) / volume_chart(ii - 2, 2);
         
         %   build train_perc_volumeOpen
         train_perc_volumeOpen(ii - nMin) = (volume_chart(ii, 3) - volume_chart(ii - 1, 3)) / volume_chart(ii - 1, 3);
@@ -94,19 +94,19 @@ function [ profit, precision, recall, accuracy ] = SVM( tsecs, prices, volumes )
     for ii = nMin + 1:m;
         %   build feature vector
         %   build train_perc_priceHigh
-        test_perc_priceHigh = (test_price_chart(ii - 1, 1) - test_price_chart(ii - 2, 1)) / test_price_chart(ii - 2, 1);
+        test_perc_priceHigh = (test_price_chart(ii, 1) - test_price_chart(ii - 1, 1)) / test_price_chart(ii - 1, 1);
         
         %   build train_perc_priceLow
-        test_perc_priceLow = (test_price_chart(ii - 1, 2) - test_price_chart(ii - 2, 2)) / test_price_chart(ii - 2, 2);
+        test_perc_priceLow = (test_price_chart(ii, 2) - test_price_chart(ii - 1, 2)) / test_price_chart(ii - 1, 2);
         
         %   build train_perc_priceOpen
         test_perc_priceOpen = (test_price_chart(ii, 3) - test_price_chart(ii - 1, 3)) / test_price_chart(ii - 1, 3);
         
         %   build train_perc_volumeHigh
-        test_perc_volumeHigh = (test_volume_chart(ii - 1, 1) - test_volume_chart(ii - 2, 1)) / test_volume_chart(ii - 2, 1);
+        test_perc_volumeHigh = (test_volume_chart(ii, 1) - test_volume_chart(ii - 1, 1)) / test_volume_chart(ii - 1, 1);
         
         %   build train_perc_volumeLow
-        test_perc_volumeLow = (test_volume_chart(ii - 1, 2) - test_volume_chart(ii - 2, 2)) / test_volume_chart(ii - 2, 2);
+        test_perc_volumeLow = (test_volume_chart(ii, 2) - test_volume_chart(ii - 1, 2)) / test_volume_chart(ii - 1, 2);
         
         %   build train_perc_volumeOpen
         test_perc_volumeOpen = (test_volume_chart(ii, 3) - test_volume_chart(ii - 1, 3)) / test_volume_chart(ii - 1, 3);
