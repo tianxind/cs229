@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  12 DEC 2012 22:46
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  14 DEC 2012 21:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -227,19 +227,19 @@ nment
 (./CS229_Final_Report.aux)
 \openout1 = `CS229_Final_Report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
-LaTeX Font Info:    ... okay on input line 29.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 29.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 31.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
@@ -318,89 +318,210 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
-LaTeX Font Info:    Try loading font information for U+msa on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 52.
+LaTeX Font Info:    Try loading font information for U+msa on input line 52.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 50.
+LaTeX Font Info:    Try loading font information for U+msb on input line 52.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 50.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 52.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 53.
- [1{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 55.
+
+Underfull \hbox (badness 1270) in paragraph at lines 56--58
+\OT1/ptm/m/n/10 of the world. Al-go-rith-mic trad-ing, some-times called
+ []
 
 
-]
-Overfull \hbox (8.17288pt too wide) detected at line 119
-\OML/cmm/m/it/10 E\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y; x\OT1/cmr/m/n/10 ) = [] 
-\OML/cmm/m/it/10 w[] [] ^^^[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y; x\OT1/cmr/m/n
-/10 ) + [] \OML/cmm/m/it/10 w[] [] ^^^[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 y; x\
-OT1/cmr/m/n/10 )
+Underfull \hbox (badness 1163) in paragraph at lines 56--58
+\OT1/ptm/m/n/10 Learn-ing has there-fore been cen-tral to the pro-cess of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 56--58
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 64--65
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 75--76
+
  []
 
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 139.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 81.
 
-Underfull \hbox (badness 1466) in paragraph at lines 148--154
-[] []$\OML/cmm/m/it/10 ^^^[] \OT1/cmr/m/n/10 = [][] \OML/cmm/m/it/10 w[]^^^[]$ 
-\OT1/ptm/m/n/10 and $\OML/cmm/m/it/10 ^^^[] \OT1/cmr/m/n/10 =
- []
-
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 172--177
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
 
  []
 
+[1{/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
-Underfull \hbox (badness 10000) in paragraph at lines 220--225
+
+]
+Underfull \hbox (badness 1107) in paragraph at lines 97--98
+[]\OT1/ptm/m/n/10 To eval-u-ate the learn-ing al-go-rithms, we sim-u-late a
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
 
  []
 
-[3]
-Underfull \vbox (badness 1314) has occurred while \output is active []
+
+Underfull \hbox (badness 10000) in paragraph at lines 112--114
+
+ []
 
 
-Overfull \hbox (13.18233pt too wide) in paragraph at lines 359--371
+Underfull \hbox (badness 1082) in paragraph at lines 115--116
+\OT1/ptm/m/n/10 per-cent-age change in high vol-ume, and 6) per-cent-age
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
+
+ []
+
+
+Underfull \hbox (badness 1087) in paragraph at lines 127--128
+\OT1/ptm/m/n/10 model could not be ap-plied well to this set of high-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--128
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--130
+
+ []
+
+<tfreg_train.jpg, id=9, 562.1pt x 421.575pt>
+File: tfreg_train.jpg Graphic file (type jpg)
+ <use tfreg_train.jpg>
+Package pdftex.def Info: tfreg_train.jpg used on input line 134.
+(pdftex.def)             Requested size: 223.58379pt x 167.68782pt.
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 140--141
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 142--143
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 158--159
+
+ []
+
+<lambda_reg.jpg, id=27, 562.1pt x 421.575pt>
+File: lambda_reg.jpg Graphic file (type jpg)
+ <use lambda_reg.jpg>
+Package pdftex.def Info: lambda_reg.jpg used on input line 163.
+(pdftex.def)             Requested size: 223.58379pt x 167.68782pt.
+ [3 <./tfreg_train.jpg> <./lambda_reg.jpg>]
+Overfull \hbox (13.76001pt too wide) in paragraph at lines 190--205
+ [][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 206--207
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 211--212
+
+ []
+
+
+Underfull \hbox (badness 1762) in paragraph at lines 213--214
+[]\OT1/ptm/m/n/10 Specifically, the per-for-mance statis-tics of an SVM
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 222--222
+[]\OT1/ptm/m/n/10 10:30-11:00
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 224--224
+[]\OT1/ptm/m/n/10 10:45-11:15
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 226--226
+[]\OT1/ptm/m/n/10 11:00-11:30
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--228
+[]\OT1/ptm/m/n/10 11:15-11:45
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 230--230
+[]\OT1/ptm/m/n/10 11:30-12:00
+ []
+
+
+Overfull \hbox (13.76001pt too wide) in paragraph at lines 218--233
  [][] 
  []
 
 [4]
 No file CS229_Final_Report.bbl.
-[5] (./CS229_Final_Report.aux) ) 
+[5
+
+] (./CS229_Final_Report.aux) ) 
 Here is how much of TeX's memory you used:
- 4053 strings out of 493488
- 58860 string characters out of 3141326
- 128620 words of memory out of 3000000
- 7271 multiletter control sequences out of 15000+200000
- 25759 words of font info for 63 fonts, out of 3000000 for 9000
+ 4040 strings out of 493488
+ 58831 string characters out of 3141326
+ 127636 words of memory out of 3000000
+ 7250 multiletter control sequences out of 15000+200000
+ 30106 words of font info for 68 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,12n,38p,1059b,656s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2012/texmf-dist/fonts/enc/d
-vips/base/8r.enc}</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmex10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmmi10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmmi5.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmmi7.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-7.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
-.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.p
-fb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
-></usr/local/texlive/2012/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/l
-ocal/texlive/2012/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texli
-ve/2012/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on CS229_Final_Report.pdf (5 pages, 161326 bytes).
+ 38i,11n,38p,836b,314s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2012/texmf-dist/fonts/enc/dvi
+ps/base/8r.enc}</usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmex10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/c
+mextra/cmex8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmmi6.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmmi7.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmmi8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6
+.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pf
+b></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><
+/usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></
+usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></us
+r/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/
+local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/lo
+cal/texlive/2012/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texl
+ive/2012/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2012/t
+exmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2012/texmf-dist/
+fonts/type1/urw/times/utmri8a.pfb>
+Output written on CS229_Final_Report.pdf (5 pages, 221136 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
- 49 compressed objects within 1 object stream
+ 95 PDF objects out of 1000 (max. 8388607)
+ 67 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

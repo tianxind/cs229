@@ -11,6 +11,8 @@
 \usepackage{algorithmic,algorithm}
 \newcommand{\maximize}[1]{\underset{#1}{\operatorname{maximize}\;}}
 \newcommand{\minimize}[1]{\underset{#1}{\operatorname{minimize}\;}}
+\newcommand{\maxx}[1]{\underset{#1}{\operatorname{max}\;}}
+\newcommand{\minx}[1]{\underset{#1}{\operatorname{min}\;}}
 \newcommand{\argmin}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{min}}\;}
 % Include other packages here, before hyperref.
 
@@ -51,328 +53,184 @@ Hongxia Zhong\\
 \thispagestyle{empty}
 
 \section{Introduction}
-The use of algorithms to make trading decisions has become a prevalent practice in major stock exchanges
-of the world. Algorithmic trading, sometimes called high-frequency trading, is
-the use of automated systems to identify true signals among massive amounts of data that capture the underlying stock market dynamics. Machine Learning has therefore been central to the process of algorithmic trading because it provides powerful tools to extract patterns from the seemingly chaotic market trends. This project, in particular, learns models from Bloomberg data to predict stock price changes and aims to make profit over time.
+The use of algorithms to make trading decisions has become a prevalent practice in major stock exchanges of the world. Algorithmic trading, sometimes called high-frequency trading, is
+the use of automated systems to identify true signals among massive amounts of data that capture the underlying stock market dynamics. Machine Learning has therefore been central to the process of algorithmic trading because it provides powerful tools to extract patterns from the seemingly chaotic market trends. This project, in particular, learns models from Bloomberg stock data to predict stock price changes and aims to make profit over time.\\
 
-Our algorithm tries to make a profit by predicting the price trend in the next minute based on the information seen earlier on that
-day. We make a buying decision if we predict an uptrend with a high confidence.  
+In this project, we examine two separate algorithms and methodologies utilized to investigate Stock Market trends and then iteratively improve the model to achieve higher profitability as well as accuracy via the predictions. 
 
-\section{Data set}
-We use data obtained from Bloomberg terminal.
-Talk about how we bucketize it into minute-by-minute data (high/low/open/close) why we make this decision.
+\section{Methods}
+\subsection{Stock Selection}
 
-Also talk about universe selection.
+Stock ticker data, relating to prices, volumes, quotes are available to academic institutions through the Bloomberg terminal and Stanford has a easily accessible one in its engineering library.\\
 
-Give an example with mean-reversion.
-
-\section{Approach}
-A brief paragraph about two approaches, pros/cons of each.
-
-\subsection{Logistic regression}
-We first used logistic regression to relate the percentage price change in the current minute to percentage price and volume
-change in the last minute. The intuition is quite simple: If the price went up in the last minute and volume also went up,
-that means more people are buying in the stock, and the uptrend should continue. Similarly, if the price went down in the 
-last minute and volume went up, that means more people are selling the stock, and the downtrend should continue. On
-the other hand, if we are seeing a decrease in volume, the previous trend should revert. For our first attempt, we used
-six features to represent the trend in price and volume. Suppose we are trying to predict percentage change in closing price
-from $t - 1$ to $t$, our regression variable $y$ would be
-\begin{equation}
-\left(P_{close}^{(t)} - P_{close}^{(t-1)}\right)/P_{close}^{(t-1)}
-\end{equation}
-Our six features would be:
+When collecting stock data for this project we attempted to have a conservative universe selection to ensure that we mined a good universe a priori and avoided stocks that were likely to be outliers to our algorithm to confuse the results. The criteria we shortlisted by were the following:
 \begin{enumerate}
-\item $\left(P_{open}^{(t)} - P_{open}^{(t-1)}\right)/P_{open}^{(t-1)}$
-\item $\left(P_{high}^{(t)} - P_{high}^{(t-1)}\right)/P_{high}^{(t-1)}$
-\item $\left(P_{low}^{(t)} - P_{low}^{(t-1)}\right)/P_{low}^{(t-1)}$
-\item $\left(V_{open}^{(t)} - V_{open}^{(t-1)}\right)/V_{open}^{(t-1)}$
-\item $\left(V_{high}^{(t)} - V_{high}^{(t-1)}\right)/V_{high}^{(t-1)}$
-\item $\left(V_{low}^{(t)} - V_{low}^{(t-1)}\right)/V_{low}^{(t-1)}$
-\end{enumerate} 
-However, we could not find a logistic model that fits this set of high-dimensional features well. We found out that our
-high-dimensional features are very noisy, so it is hard to fit a line through the data points. 
-
-In an attempt to reduce the dimensionality of our regression features, we selected the two most significant features: 
-\begin{enumerate}
-\item $\left(P_{open}^{(t)} - P_{open}^{(t-1)}\right)/P_{open}^{(t-1)}$
-\item $\left(V_{open}^{(t)} - V_{open}^{(t-1)}\right)/V_{open}^{(t-1)}$
+\item price between 10-30 dollars
+\item membership in the last 300 of SP500
+\item average daily  volume (ADV) in the middle 33 percentile
+\item variety of stock sectors
 \end{enumerate}
 
-\[\frac{\%\Delta P_{open}^t}{5MinHighLowSpread}\]
-While logistic regression is able to fit a model with the two-dimensional feature set, the result is quite poor. The average profit made via trading on the selected 25 stocks is -? with a x\% precision and y\% recall. Then we tested our logistic regression model on the training set (9:30am to 11:00am) again and the results are also quite poor (give stats), this suggests that our model is suffering from high variance, and we must choose more descriptive features while keeping low dimensionality. Specifically, the percentage changes in price and volume of the one-minute timeframes are extremely volatile quantities, they are influenced by general trends of the market which normally lasts longer than one minute. For example, if the market enters a mode of frequent fluctuations in a certain time, then large 1-minute percentage changes in price or volume become less significant in comparison to the general trend. On the other hand, in a smoother market, even small percentage changes need to be considered with higher weights.
+%TODO: Appendix
+According to the listed criteria, we obtained a universe of 23 stocks for this project\footnote{See Appendix}.\\
 
-As a result, we decide to model the local general trend of the market from the high-low spread of the previous 5 minutes of any given time. Instead of using one-minute percentage changes, we choose to use percentage change over 5 minute high-low spread ratio of price and volume as our features. (maybe use math notations to express). Then we retrain the logistic regression model with the new features and we achieved quite promising results (x profit, y\% precision, z\% recall).
+The data we focussed on was the price and volume movements for each stock throughout the day on a tick-by-tick basis. This data was then further preprocessed to enable interfacing with Matlab and integrate into the machine learning algorithms.
 
-\subsection{Conditional Random Fields and Graphcuts}
-Conditional random fields (CRFs) are the probabilistic model we use for segmention, which defines a conditional probability distribution of label sequences given the observation sequences. Suppose $x$ is the features of the image, $y \in \{-1, +1\}$ is the segmentation label, with $-1$ denoting background and $+1$ denoting foreground. The CRF can be formulated as
-\begin{equation}
-P(y\mid x) = \frac{P(y,x)}{\sum_{y'}P(y',x)}  = \frac{1}{Z(x)}\exp(-E(y,x)) 
-\end{equation}
-where $Z(x)$ is the normalizing function, and $E(y,x)$ is the energy function
-computed from various features. $E$ consists of both node potentials and
-edge potentials. Intuitively, node potentials encodes the energy of a depth point taking
-on a particular label, and edge potential encodes the energy of a pair of depth points
-sharing the same label. In particular, $E$ can be written as\cite{AlexRGB}
-\begin{equation}
-E(y,x) = \sum_{i\in \Phi_v} w_i \sum_{j \in v_i} \phi_j^{(i)}(y,x)
-+ \sum_{i\in \Phi_{\mathcal{E}}} w_i \sum_{{(j,k)}\in \mathcal{N}_i} \phi_{jk}^{(i)}(y,x)
-\end{equation}
-Here, $\Phi_v$ is the set of node potential indices (i.e. one for each type of node
-potential such as distance to previous foreground or bilateral filter), $v_i$ is the
-set of all node indices for this potential type (one per depth point), and 
-$\phi_j^{(i)}$ is the node potential of type $i$ at depth point $j$. Similarly,
-$\Phi_\mathcal{E}$ is the set of edge potential indices, $\mathcal{N}_i$ is the 
-edge set for edge potential type $i$. In our implementation, we draw an edge between depth point $j$ and each depth point $k$ within a hand-picked radius of point $j$. $\phi_{jk}^{(i)}$ is the edge potential between depth point $j$ and $k$
-for edge potentials of type $i$. The weight $w_i$ describes how important the
-$i$th potential is.
+\subsection{Preprocessing}
+Before using the data in the learning algorithms, the following preprocessing steps were taken.
+\subsubsection{Discretization}
+Since the tick-by-tick entries retrieved from Bloomberg happen in non-deterministic timestamps, we attempted to standardize the stock data by discretizing the continuous time domain, from 9:00 am to 5:00 pm when the market closes. Specifically, the time domain was separated into 1-minute buckets and we discarded all granularities within each bucket and treated the buckets as the basic units in our learning algorithms.
+ 
+\subsubsection{Bucket Description}
+For each 1-minute bucket, we attempted to extract 8 identifiers to describe the price and volume change of that minute heuristically. We discussed the identifier selection with experienced veteran in algorithmic trading industry (footnote: Keith). Based on his suggestions, we chose the following 4 identifiers to describe the price change:
+\begin{enumerate}
+\item open price: price at the beginning of each 1-minute bucket
+\item close price: price at the end of each 1-minute bucket
+\item high price: highest price within each 1-minute bucket
+\item low price: lowest price within each 1-minute bucket
+\end{enumerate}
+Similarly, we chose open volume, close volume, high volume and low volume to describe the volume change.\\
 
-The goal of MAP inference in this model is to choose the most likely segmentation $y$ given the features $x$ by solving\cite{AlexRGB}
-\begin{equation}
-\maximize{y} P(y \mid x) = \minimize{y} E(y,x)
-\end{equation}
+With this set of identifiers, we can formulate the algorithms to predict the change in the closing price of each 1-minute bucket given information of the remaining seven identifiers (volume and price) prior to that minute\footnote{open price/volume, high price/volume, low price/volume, end volume}. The identifiers help capture the trend of the data of a given minute.
 
-The solution of this problem can be efficiently computed using graph cuts.
-We construct graph $G$ with all depth points as our node set, and edges between each depth point and its neighbors as our edge set. Then we assign
-node potential and edge potential using the definition of $E$ above. We start
-with the seed frame, run graph cuts every frame in the sequence and use the current frame as ground truth for segmenting the next frame. Specifically,
-\begin{algorithm}[H]
-\caption{Graphcuts segmentation. } \label{gc_seg}
-\begin{algorithmic}[1]
-\STATE Let $D = \{d_1, d_2,\cdots,d_k\}$ be the $k$-frame-sequence we want to segment, where $d_i$ is the $i$th RGBD frame. Let $Y = \{y_1\}$ be the segmentation of this
-sequence. Initially, we only have $y_1$ which is the hand-segmented ground truth for the seed frame. 
-\FOR{$i = 2, 3,\cdots,k$}{
-\STATE Construct graph $G$ with nodes $V = \{v_1, v_2, \cdots, v_n\}$ where $v_i$'s are the depth points of $d_i$.
-\STATE Use $y_{i-1}$ as ground truth labeling when computing node and edge
-potentials. 
-\FOR{$v_j \in V$}{
-\STATE $\phi_{j_{source}} = \sum_{i\in\Phi_v} w_i \phi_{j_{source}}^{(i)}$ and $\phi_{j_{sink}} = \sum_{i\in\Phi_v} w_i \phi_{j_{sink}}^{(i)}$ where 
-$\phi_{j_{source}}^{(i)}$ is the source potential of type $i$ at depth point $v_j$, $\phi_{j_{sink}}^{(i)}$ is the corresponding sink potential, and $w_i$ is the weight
-for node potential type $i$.
-A large positive
-source potential means that $v_j$ is more likely to be foreground and a large
-positive sink potential means that $v_j$ is more likely to be background.  
-\STATE Add an edge $e_{jk}$ for every depth point $v_k$ that is within radius
-$r$ of $v_j$.
-\FOR{each $e_{jk}$}{
-\STATE $\phi_{jk} = \sum_{i\in\Phi_\mathcal{E}} w_i \phi_{jk}^{(i)}$ where
-$\phi_{jk}^{(i)}$ is the edge potential type $i$ for $e_{jk}$ and $w_i$ is
-the weight for edge potential type $i$. A large edge potential
-means that points $j$ and $k$ are more likely to share the same label.  
-}\ENDFOR
-}\ENDFOR
-\STATE Run maxflow on $G$. Let $y_i$ be the source and sink labels produced
-by maxflow, where source denotes foreground and sink denotes background.
-\STATE $Y = Y \cup y_i$. 
-}\ENDFOR
-\end{algorithmic}
-\end{algorithm}
+\subsection{Metrics}
+To evaluate the learning algorithms, we simulate a real-time trading process, on one single day, using the models obtained from each algorithm. Again, we discretize the continuous time domain into 1-minute buckets. For each bucket at time $t$, each model attempts to invest 1 share in each stock if it predicts an uptrend in price, i.e.  $P_{close}^{(t)}> P_{open}^{(t)}$. If a model invested in a stock at time $t$, it always sells that stock at the end of that minute($t$). To estimate profit, we calculate the price difference $P_{close}^{(t)}-P_{open}^{(t)}$ to update the rolling profit. If, on the other hand, it predicts a downtrend it does nothing. This rolling profit, denoted concisely as just "profit" in this report, is one of our metrics in evaluating the algorithm's performance.\\
 
-\subsection{Energy function terms}
-We now discuss different node and edge potentials we use in our graph cuts algorithm.
-\subsubsection{Node potentials} All node potentials have two parts, source
-potential and sink potential. We constrain them to $[0, 1]$. We visualize
-node potentials to give us an intuitive sense how they help the performance
-of our algorithm. Sample visualizations can be found in Figure 1.
-\\
+In addition to profit, we also utilize the standard evaluation metrics: accuracy, precision and recall, to judge the performance of our models. Specifically,
+\begin{eqnarray*}
+\text{accuracy} &=& \frac{ \text{\# correct predictions}}{\text{\# total predictions}} \\
+\text{precision} &=& \frac{ \text{\# accurate uptick predictions}}{\text{\# uptick predictions}} \\
+\text{recall} &=& \frac{ \text{\# accurate uptick predictions}}{\text{\# actual upticks}}
+\end{eqnarray*}
 
-\indent \textbf{Distance to previous foreground} This potential is inversely related to the distance of a depth point to its nearest neighbor in the
-foreground of the previous frame. Formally,
-\begin{equation}
-\phi_{i_{source}} = \exp\left(-\frac{\|v_i-v'_k\|_2}{\sigma}\right)
-\end{equation}
-and
-\begin{equation}
-\phi_{i_{sink}} = 1 - \phi_{i_{source}}
-\end{equation}
-where $v'_k$ is $v_i$'s closest neighbor in the foreground of the previous frame,
-and $\sigma$ is a hand-picked parameter to control how fast the potential falls off
-with distance.
+To conclude, each time we evaluate a specific model or algorithm, we take the average precision, average recall and average accuracy and average profit over all 23 stocks in our universe. These are the metrics used for performance in this report.
+ 
+\section{Models \& Results}
+\subsection{Logistic Regression}
+\subsubsection{Feature Optimization and Dimensionality Constraint}
+To predict the stock-price trends, our goal was to predict
+\[1\{{P_{close}^{(t)}>P_{open}^{(t)}}\}\]
+based on the discussion above.\\
 
-\indent \textbf{Bilateral filter}
-To compute bilateral potential of depth point $v_i$, we find all depth points within radius $r$ of $v_i$ in the previous frame. The bilateral potential is a sum of their labels weighted by their distance to $v_i$. Formally,
-\begin{equation}
-\psi_i = \sum_{v'_k\in N} y'_k \exp\left(-\frac{\|v_i - v'_k\|_2}{\sigma}\right)
-\end{equation}
-where $N$ is the set of all neighboring points of $v_i$ in previous frame,
-$y'_k\in\{-1, +1\}$ is the label of $v'_k$ in previous frame, $\sigma$ is a
-hand-picked parameter to control how fast the weights fall off with distance.
-And we need to convert $\psi_i$ to sink and source potential in range $[0,1]$.
-We can do this by first converting it to $\phi_i \in [-1, +1]$
-\begin{equation}
-\phi_i = \frac{2}{1+\exp(-\psi_i)}-1
-\end{equation}
-Then we can convert it to range $[0, 1]$ by
-\begin{equation}
-\phi_{i_{source}} = \left\{\begin{array}{l r}
-\phi_i & \text{if $\phi_i > 0$} \\
-0 & \text{if $\phi_i < 0$} \\
-\end{array} \right.
-\end{equation}
-Similarly,
-\begin{equation}
-\phi_{i_{sink}} = \left\{\begin{array}{l r}
--\phi_i & \text{if $\phi_i < 0$} \\
-0 & \text{if $\phi_i  > 0$} \\
-\end{array} \right.
-\end{equation}
+The first model we tried was \textbf{Logistic Regression}\footnote{Our implementation utilizes the MNRFIT library in Matlab.} Initially, we attempted to fit logistic regression with the following six features: 1) percentage change in open price, 2) percentage change in high price, 3) percentage change in low price, 4) percentage change in open volume, 5) percentage change in high volume, and 6) percentage change in low volume.\\
 
-\subsection{Edge potentials}
-Edge potentials encodes the energy of two points sharing the same label, i.e.
-two points are more likely to share the same label if their edge potential is
-big and vice versa. Similar to node potentials, there is a $\sigma$ term in all
-edge potentials which controls how fast the potential falls off.
-\\
+Note that although change in "open" variables are between the current and previous 1-minute bucket, since high and low variables for the current 1-minute bucket are unobserved so far, we can only consider the change between the previous two buckets as an indicator of the trend. Formally, these features can be expressed using the formula below\footnote{We will denote features using the numbering of equations for the rest of this report, e.g. feature (1) is $\left(P_{open}^{(t)} - P_{open}^{(t-1)}\right)/P_{open}^{(t-1)}$)}: 
+ \begin{eqnarray}
+&\left(P_{open}^{(t)} - P_{open}^{(t-1)}\right)/P_{open}^{(t-1)} \\
+&\left(P_{high}^{(t-1)} - P_{high}^{(t-2)}\right)/P_{high}^{(t-2)} \\
+&\left(P_{low}^{(t-1)} - P_{low}^{(t-2)}\right)/P_{low}^{(t-2)} \\
+&\left(V_{open}^{(t)} - V_{open}^{(t-1)}\right)/V_{open}^{(t-1)} \\
+&\left(V_{high}^{(t-1)} - V_{high}^{(t-2)}\right)/V_{high}^{(t-2} \\
+&\left(V_{low}^{(t-1)} - V_{low}^{(t-2)}\right)/V_{low}^{(t-2)}
+\end{eqnarray}
 
-\indent\textbf{3D distance} This potential is inversely related to the 3D
-distance between 2 depth points. Formally,
-\begin{equation}
-\phi_{ij} = \exp\left(-\frac{\|v_i - v_j\|_2}{\sigma}\right)
-\end{equation}
+The results, however, showed that a logistic regression model could not be applied well to this set of high-dimensional features. Intuitively this behavior can be explained if we consider the significant noise introduced by the high-dimensional features, which makes it difficult to fit weights for our model. More specifically, this behavior could be due to certain features obscuring patterns obtained by other features.\\
 
-\indent\textbf{Color distance} This potential is inversely related to the distance
-between the RGB-color of the corresponding pixels of two depth points.
-Formally,
-\begin{equation}
-\phi_{ij} = \exp\left(-\frac{\|c_i - c_j\|_2}{\sigma}\right)
-\end{equation}
+In an attempt to reduce the dimensionality of our feature space, we use cross-validation to eliminate less effective features. We realized that logistic regression model on stock-data can fit at most two-dimensional feature space with reliability. The results of the cross validation suggested that feature(1) and feature(4) provide optimal results.\\
 
-\indent\textbf{Surface Normal} This potential measures how much the surface
-normal changes from one point to another. It is inversely related to the 
-angle between surface normals at two points. Formally,
-\begin{equation}
-\phi_{ij} = \exp\left(-\frac{\arccos(n_i\cdot n_j)}{\sigma}\right)
-\end{equation}
-where $n_i$ and $n_j$ are the unit-length surface normal vector at depth points
-$v_i$ and $v_j$.
+In addition to optimizing the feature set, we also use cross-validation to obtain an optimal training set, which is defined as the \emph{training duration} in our application. Figure 1 plots the variation of the metrics over training durations from 30-minute period to 120-minute period (the heuristic assumption is training begins at 9:30 AM, and testing lasts for 30 minutes right after training finishes). We observe that logistic regression model achieves maximal performance when training duration is set to 60 minutes. 
+\begin{figure}[H]
+\caption{Performance over different training durations}
+\includegraphics[width=0.45\textwidth]{tfreg_train}
+\end{figure}
 
-\subsection{Learning}
-In our algorithm, we use Structural Support Vector Machine (SSVM) \cite{SSVM20, SSVM21} to choose weight $w$ that maximizes the MAP. 
-Each training example adds a constraint to our model. SSVM uses an iterative
-process to add more and more constraints and computes the weights that maximize the margin between the ground truth labels and the incorrect labels. To simplify the problem, we use the greedy approximation known as 1-slack formuation \cite{SSVM9} . Thus we can formulate the approximation of the margin maximizing problem as follows:
-\begin{equation}
-\begin{array}{l l}
-\minimize{w,\xi} & \frac{1}{2}||w||^2 + C\xi \nonumber \\
-\text{subject to} & \xi \ge 0 \\
-& \frac{1}{M}\sum_{m=1}^{M}E(\hat{y_m},x_m)-E(y_m, x_m) \\
-& \ge \frac{1}{M}\sum_{m=1}^{M}\Delta(y_m, \hat{y_m}) - \xi \nonumber \\
-& \forall (\hat{y_1},...,\hat{y_M}) \in \mathcal{Y} \nonumber \\
-\end{array}
-\end{equation}
-where $\Delta$ is a loss function and $\Delta(y_m, y)$ is 0-1 loss. $C$ is a constant while $\xi_m$ is a slack variable for training example $m$, and $\mathcal{Y}$ is the set of possible labelings of an image. Since graph cuts is based on non-negative edge weights, we constrain the edge weights to be non-negative.
-\begin{algorithm}
-\caption{Structural SVM for tracking. } \label{algo_ssvm}
-\begin{algorithmic}[1]
-\STATE $\mathcal{D}$ is a set of training examples $(y,x)$ created by
-human-labeling.
-\STATE $C$ and $\varepsilon$ are constants, chosen by cross validation.
-\STATE
-\STATE $\mathcal{W} \gets 0$
-\REPEAT
-\STATE Update the parameters $w$ to maximize the margin.
-\begin{equation}
-\begin{array}{ll}
-\minimize{w,\xi} & \frac{1}{2}||w||^2 + C\xi \\
-\text{subject to} & w \ge 0, \xi \ge 0 \\
-& \frac{1}{M}\sum_{m=1}^{M}E(\hat{y_m},x_m)-E(y_m, x_m) \\
-& \ge \frac{1}{M}\sum_{m=1}^{M}\Delta(y_m, \hat{y_m}) - \xi \\
-& \forall (\hat{y_1},...,\hat{y_M}) \in \mathcal{Y} \\
-\end{array}
-\end{equation}
-\FOR { $(y_m, x_m) \in \mathcal{D}$ }
-\STATE Find the MAP assignment using graph cuts.
-\STATE $\hat{y_m} \gets \argmin{y}E(y,x_m)$,
-\ENDFOR
-\STATE $\mathcal{W} \gets \mathcal{W} \cup \{\hat{y_1}\, ...,\hat{y_M}\} $
-\UNTIL {\begin{equation}
-\begin{array}{l}
-\frac{1}{M}\sum_{m=1}^{M}\Delta(y_m, \hat{y_m}) - E(\hat{y_m},x_m)\\
--E(y_m, x_m) \le \xi+\varepsilon
-\end{array}
-\end{equation}
-}
-\end{algorithmic}
-\end{algorithm}
+Hence, we train the logistic regression model with feature (1) and feature (4), starting from 9:30 AM to 10:30 AM, and the obtained model obtains precision $55.07\%$, recall $30.05\%$, accuracy $38.39\%$, and profit $0.0123$ when testing for the rest of the day.
 
-\section{Experiment}
-We test our algorithm at different stages of implementation on XXX dataset 
-and evaluated our results both qualitatively and quantitatively.
+\subsubsection{Improvements based on Time Locality}
+While logistic regression was able to achieve a reasonable performance with the two-dimensional feature set including (1) and (4) and made a profit of $0.0123$ , we attempted to further improve our results. Based on earlier discussion, our logistic regression model is constrained to a low-dimensional feature space. As a result, we must either select more descriptive features in low-dimensional feature space or use a different model that would learn from a higher-dimensional feature space for our application.\\ 
 
-\subsection{Data set}
-We use a dataset in the same format as Stanford Track Collection with 6 sequences and 227 frames extracted from natural, unstaged street scenes
-with a dense LIDAR system mounted on a car. Each sequence has 2 to 4 tracked objects. Data was recorded while driving and while parked at busy intersections with many people, bicyclists, and cars.
+We started by constructing more descriptive features. We hypothesized that the stock-market exhibits significant time-locality of price-trends based on the fact that it is often influenced by group decision making and other time-bound events that occur in the marketplace. The signals of these events are usually visible over a time-frame longer than a minute since in the very-short term, these trends are masked by the inherent volatility of the stock prices in the market. For example, if the market enters a mode of general rise with high-fluctuation at a certain time, then large 1-minute percentage changes in price or volume become less significant in comparison to the general trend.\\
 
-\subsection{Evaluation Metrics}
-We evaluate the results both qualitatively and quantitatively. For our camshift baseline, we mainly evaluated it qualitatively by eyeballing the segmentation, while for our graphcuts algorithm, we mainly evaluated it quantitatively by calculating "Normalized Accuracy"\cite{AlexRGB} compared to our hand-segmented ground truth.
+We attempted to address these concerns by formulating new features based on the $\lambda$-minute high-low model\footnote{Inspired by CS 246 (2011-2012 Winter) HW4, Problem 1.}. Professionals in the algorithmic trading field recommended the heuristic choice of $\lambda=5.$\footnote{Keith Siilats, a former CS 246 TA} The $\lambda$-minute high-low model tracks the high price, low price, high volume, low volume across all the ticks in any $\lambda$-minute span. For the most recent $\lambda$-minute span w.r.t. any 1-minute bucket of time $t$, we define $PH_{\lambda}^{(t)}$, $PL_{\lambda}^{(t)}$, $VH_{\lambda}^{(t)}$, $VL_{\lambda}^{(t)}$ as follows:
+\begin{eqnarray}
+PH_{\lambda}^{(t)} &=& \maxx{t - \lambda \leq i \leq t - 1}P^{(i)}_{high} \\
+PL_{\lambda}^{(t)} &=& \minx{t - \lambda \leq i \leq t - 1}P^{(i)}_{low} \\
+VH_{\lambda}^{(t)} &=& \maxx{t - \lambda \leq i \leq t - 1}P^{(i)}_{high} \\
+VL_{\lambda}^{(t)} &=& \minx{t - \lambda \leq i \leq t - 1}P^{(i)}_{low}
+\end{eqnarray}
 
-Normalized Accuracy is a measure to capture how many points we are classifying correctl normalized by the actual foreground size. Formally,
-\begin{equation}
-NA = 1-\min\left(1, \frac{N_{fp} + N_{fn}}{N_{foreground}}\right)
-\end{equation}
-where $N_{fp}$ is the number of false positives (labeled as foreground by our
-algorithm but are actually background), $N_{fn}$ is the number of false
-negatives (labeled as background by our algorithm but are actually foreground).
-And $N_{foreground}$ is the number of foreground points in ground-truth
-segmentation.
+Under the $\lambda$-minute high-low model, we choose our features to be the following:
+\begin{eqnarray}
+\frac{\left(P_{open}^{(t)} - P_{open}^{(t-1)}\right)}{PH_\lambda^{(t)}-PL_\lambda^{(t)}} \\
+\frac{\left(V_{open}^{(t)} - V_{open}^{(t-1)}\right)}{VH_\lambda^{(t)}-VL_\lambda^{(t)}}
+\end{eqnarray}
 
-\section{Experiment}
-\subsection{Camshift baseline}
-Our baseline does a decent job on the first few frames, but has very high
-error after that.
-However, it has three major disadvantages. First, Camshift assumes that
-the camera does not shift position vastly. If the camera changes position and 
-orientation a lot, Camshift has very high error tracking the object.
-Second, Camshift computes the position of the tracked object in the new frame
-by finding a window that has the highest back projection with regard to the
-color histogram of the object in the seed frame. It depends greatly on color,
-which is brittle to illumination and photometric variances, etc. Also when the
-object's color is close to background, Camshift cannot distinguish between
-them.  
-Finally, Camshift is a bounding box tracker, while a lot of real world objects
-cannot be represented as a box. We cannot apply our Normalized Accuracy
-measure to Camshift results because the bounding box gives too many
-false positives.
-Figure 3 shows sample frames of Camshift segmentation on sequence 1. 
+Specifically, they are the ratio of open price and open volume change to the most recent ``$\lambda$-minute high-low spread", respectively.\\
 
-\subsection{Our algorithm}
-Compared to Camshift, our algorithm performs significantly better. The final
-normalized accuracy on 6 test sequences are shown in the following chart:
-
-Sample frames extracted from 6 sequences are shown in Figure 4.
-
-We tested our algorithm at different stages of implementation. Here is a summary of what features we added at each stage:
-
-\indent\textbf{Stage 1} Used only distance to previous foreground as node potential and 
-3D distance as edge potential. Used coordinate system relative to camera on
-car.\\
-\indent\textbf{Stage 2} Changed coordinate system to smooth coordinates. This is an
-absolute coordinate system based on GPS. Therefore, static objects, such as
-traffic signs, will have the same coordinates in every frame.\\
-\indent\textbf{Stage 3} Added bilateral node potential.\\
-\indent\textbf{Stage 4} Added color edge potential.\\
-\indent\textbf{Stage 5} Added surface normal edge potential.\\
-\indent\textbf{Stage 6} Implemented SSVM to learn weights of different potentials.
-
+Considering that our stock universe may be different, we use cross-validation to determine the optimal value of $\lambda$. Figure 2 suggests that $\lambda=5$ leads to maximal precision while $\lambda=10$ guarantees maximal profit and recall. For the purpose of this project, we chose $\lambda=5$ because higher precision leads to a more conservative strategy.
+\begin{figure}[H]
+\caption{Performance over different $\lambda$}
+\includegraphics[width=0.45\textwidth]{lambda_reg}
+\end{figure}
+Also, we set training duration to 60 minutes based another cross-validation analysis with $\lambda=5$. Our $\lambda$-minute high-low logistic regression model finally achieves precision $59.39\%$, recall $27.43\%$, accuracy $41.58\%$ and profit $0.0186$.
 
 \begin{table}[H]
 \centering
-\caption{Normalized accuracy on all frame at different stages of implementation}
-\begin{tabular}{ c|c|c|c|c|c }
-Stage 1    &   Stage 2 & Stage 3 &  Stage 4 & Stage 5 & Stage 6 \\
+\caption{Comparison between two logistic regression models}
+\begin{tabular}{ c|c|c|c|c }
+ Model  & Profit & Precision & Recall & Accuracy \\
 \hline
 \hline
-0.1393     &     0.3558  &    0.4036   & 0.4139     &  0.4156       &  0.5481\\
-0     &     0.0733    &    0.0941   & 0.0778     &  0.076         &  0.2917\\
-0     &     0.5770  &    0.5511   & 0.5193     &  0.5295       &  0.6264\\
-0.1943    &     0.7512  &    0.7521   & 0.7573     &  0.7641       &   0.7685 \\
-0.1943     &     0.7015  &    0.7143   & 0.6917     &  0.7090	    &  0.7300\\
-0.1059     &     0.6200  &    0.6584   & 0.6184     &  0.6161       &  0.6867 \\
+Baseline & 0.0123   &     $55.07\%$  &    $30.05\%$   & $38.39\%$  \\
+$\lambda$-HL    &    0.0186     &   $59.39\%$   & $27.43\%$   &  $41.58\%$ \\
 \hline
 \end{tabular}
 \end{table}
-We can see that [feature] and [feature] give us biggest improvement on
-performance. This corresponds with the weights we learned from
-SSVM. [feature1] and [feature2] have bigger weights while features such
-as color edge potential has a weight close to 0.
+
+By compare the performance of the two logistic regression models in Table 1, we clearly see that $\lambda$-minute high-low model provides a superior model than baseline model. This result validates our hypothesis on the time-locality characteristic of stock data and suggests that time-locality lasts around 5 minutes.
+
+\subsection{Support Vector Machine}
+As we discussed earlier, further improvement of results may still be possible by exploring a new machine learning model. The previous model we explored contained us to a low-dimensional feature space, and to overcome this constraint, we attempted to experiment with \textbf{SVM using $\ell$-1 regularization with $C = 1$}.
+
+\subsubsection{Feature \& Parameter Selection}
+We tried different combinations of the 8 features defined by equation (1) to (6), equation (11), and equation(12). Since there are a large number of feature combinations to consider, we used forward-search to continuously add features to our existing feature set and choose the best set based on our 4 metrics.
+\begin{table}[H]
+\centering
+\caption{Performance over different feature sets}
+\begin{tabular}{ p{2cm}|c|c|c|c }
+ Features  & Profit & Precision & Recall & Accuracy \\
+\hline
+\hline
+(1), (4) & 0.3066   &     $44.72\%$  &    $52.11\%$   & $42.85\%$  \\
+\hline
+(11), (12) &    0.3706     &   $42.81\%$   & $57.64\%$   &  $40.34\%$ \\
+\hline
+(1), (4), (11), (12) &    0.3029     &   $42.48\%$   & $47.54\%$   &  $39.42\%$ \\
+\hline
+(1), (4), (11), (12), (2), (5) &    0.3627     &   $45.22\%$   & $56.25\%$   &  $42.60\%$ \\
+\hline
+(1), (4), (11), (12), (2), (5), (3), (6) &    0.3484     &   $46.43\%$   & $55.66\%$   &  $42.91\%$ \\
+\hline
+\end{tabular}
+\end{table}
+We chose the last feature set since it leads to the highest precision and also very high profit, recall, and accuracy. In addition, we set training duration to 60 minutes using cross-validation. Similarly, we choose optimal $\lambda=10$ and $C=0.1$ using cross-validation. We also compared linear kernel with Gaussian kernel, and linear kernel tends to give better results.\\
+
+The SVM model trained with the chosen training duration, $\lambda$ and $C$ finally achieves precision $47.13\%$, recall $53.96\%$, accuracy $42.30\%$ and profit $0.3066$. By comparing $\lambda$-minute high-low regression model with SVM model, we see that SVM model significantly improves recall, by almost 100\%, by only sacrificing a small percentage of precision, around 20\%.
+
+\subsubsection{Time-Locality Revisited}
+Recall that the $\lambda$-min high-low model is based on our hypothesis that there exists a $\lambda$ minute rolling correlation in between trades within a certain period of time, and by cross-validation, we choose $\lambda=10$ for the SVM model. To further substantiate this hypothesis, we conducted an experiment in which we train an SVM using the optimal parameters from the previous section, and then we evaluate the accuracy of the model by testing it on different periods of time.\\
+
+Specifically, the performance statistics of an SVM model, trained from 9:30 AM to 10:30 AM, are listed in Table 3. A close inspection shows that there exists a downtrend in performance as delay between testing period and training period becomes larger. In fact, it wouldn't be surprising to see even better performance of this model within 10 minutes after training completes as we chose $\lambda=10$\footnote{The result is precision: $68.84\%$, recall: $36.88\%$, accuracy: $44.84\%$, which tops all other results in Table 3.}!
+
+\begin{table}[H]
+\centering
+\caption{Performance over periods of time}
+\begin{tabular}{ p{2cm}|c|c|c|c }
+ Period  & Profit & Precision & Recall & Accuracy \\
+\hline
+\hline
+10:30-11:00 AM &    0.0926     &   $56.45\%$   & $38.10\%$   & $43.92\%$  \\
+\hline
+10:45-11:15 AM &    0.0684     &   $42.49\%$   & $38.32\%$   &  $42.15\%$ \\
+\hline
+11:00-11:30 AM &    0.0775     &   $54.29\%$   & $41.09\%$   &  $43.07\%$ \\
+\hline
+11:15-11:45 AM &    0.0726     &   $48.68\%$   & $36.68\%$   &  $38.68\%$ \\
+\hline
+11:30-12:00 AM &    0.0632     &   $32.74\%$   & $29.77\%$   &  $40.44\%$ \\
+\hline
+\end{tabular}
+\end{table}
 
 \section{Conclusion}
 We have applied successfully a segmentation and tracking model for hand-held

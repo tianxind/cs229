@@ -1,9 +1,0 @@
-% Bucketize percentage into 5 buckets
-% bucket 1 -- [0, 25%)
-% bucket 2 -- [25%, 50%)
-% bucket 3 -- [50%, 75%)
-% bucket 4 -- [75%, 100%)
-% bucket 5 -- [100%, Inf)
-function bucket = bucketize_perc(percentage)
-  floor(percentage / 0.25) + 1
-end
